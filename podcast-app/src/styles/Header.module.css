@@ -1,0 +1,14 @@
+.appHeader {
+  background: var(--white);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  border-bottom: 3px solid var(--red);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.appTitle {
+  color: var(--red);
+  margin: 0;
+  font-family: var(--font-heading);
+}

@@ -1,0 +1,13 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  padding: 1rem;
+  text-align: center;
+}
+.text {
+  color: var(--red);
+  font-size: 1rem;
+}

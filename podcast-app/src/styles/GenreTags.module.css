@@ -1,0 +1,13 @@
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.tag {
+  background: var(--border);
+  border: 1px solid var(--border);
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--dark);
+}
