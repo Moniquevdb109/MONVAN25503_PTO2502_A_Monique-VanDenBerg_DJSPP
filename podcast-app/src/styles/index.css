@@ -12,6 +12,16 @@
   --font-body: 'DM Sans', sans-serif;
 }
 
+[data-theme="dark"] {
+  --red: #e05555;
+  --dark: #f7f5f2;
+  --mid: #bbbbbb;
+  --light: #1a1a1a;
+  --white: #2a2a2a;
+  --border: #3a3a3a;
+  --grey-text: #bbbbbb;
+}
+
 body {
   font-family: var(--font-body);
   margin: 0;

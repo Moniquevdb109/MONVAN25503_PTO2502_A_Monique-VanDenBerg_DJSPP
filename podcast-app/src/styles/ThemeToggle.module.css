@@ -1,0 +1,13 @@
+.toggleBtn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.4rem 0.75rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.toggleBtn:hover {
+  border-color: var(--red);
+}

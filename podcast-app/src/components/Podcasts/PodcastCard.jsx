@@ -30,8 +30,8 @@ export default function PodcastCard({ podcast, genres, onClick }) {
     <div className={styles.card} onClick={onClick}>
       <img src={podcast.image} alt={podcast.title} />
 
-      <h3>{podcast.title}</h3>
-      <p className={styles.seasons}>{podcast.seasons} seasons</p>
+      <h3>{podcast.title.replace(/&amp;/g, "&")}</h3>
+      <p>{podcast.seasons} {podcast.seasons === 1 ? "season" : "seasons"}</p>
       <div className={styles.tags}>{genreSpans}</div>
       <p className={styles.updatedText}>
         Updated {formatDate(podcast.updated)}
