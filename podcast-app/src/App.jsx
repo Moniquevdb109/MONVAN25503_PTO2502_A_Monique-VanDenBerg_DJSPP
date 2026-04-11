@@ -5,18 +5,23 @@ import ShowDetail from "./pages/ShowDetail";
 import { PodcastProvider } from "./context/PodcastContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { FavouritesProvider } from "./context/FavouritesContext";
+import { AudioPlayerProvider } from "./context/AudioPlayerContext";
+import GlobalPlayer from "./components/UI/GlobalPlayer";
 
 export default function App() {
   return (
     <ThemeProvider>
       <FavouritesProvider>
-      <Header />
-      <PodcastProvider>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/show/:id" element={<ShowDetail />} />
-        </Routes>
-      </PodcastProvider>
+        <AudioPlayerProvider>
+          <Header />
+          <PodcastProvider>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/show/:id" element={<ShowDetail />} />
+            </Routes>
+          </PodcastProvider>
+          <GlobalPlayer />
+        </AudioPlayerProvider>
       </FavouritesProvider>
     </ThemeProvider>
   );
