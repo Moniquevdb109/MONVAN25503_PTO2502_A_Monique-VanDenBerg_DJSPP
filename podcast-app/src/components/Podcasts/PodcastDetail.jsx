@@ -3,11 +3,13 @@ import { formatDate } from "../../utils/formatDate";
 import GenreTags from "../UI/GenreTags";
 import styles from "../../styles/PodcastDetail.module.css";
 import { useAudioPlayer } from "../../context/AudioPlayerContext";
+import { useFavourites } from "../../context/FavouritesContext";
 
 function SeasonNav({ seasons, podcast }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [dropdownOpen, setDropdownOpen]   = useState(false);
   const { play, pause, isPlaying, currentTrack } = useAudioPlayer();
+  const { addFavourite, removeFavourite, isFavourite } = useFavourites();
 
   if (!seasons || seasons.length === 0) {
     return <p className={styles.empty}>No seasons available.</p>;
@@ -61,7 +63,7 @@ function SeasonNav({ seasons, podcast }) {
 
       <div className={styles.episodeList}>
         {currentSeason.episodes.map((ep) => {
-          const trackId = `${currentSeason.season}-${ep.episode}`;
+          const trackId = `${podcast.id}-${currentSeason.season}-${ep.episode}`;
           const isThisPlaying = isPlaying && currentTrack?.id === trackId;
           return (
             <div key={ep.episode} className={styles.episodeCard}>
@@ -74,6 +76,23 @@ function SeasonNav({ seasons, podcast }) {
                 <h4 className={styles.episodeTitle}>{ep.title}</h4>
                 <p className={styles.episodeDescription}>{truncate(ep.description)}</p>
               </div>
+              <button
+                className={`${styles.heartBtn} ${isFavourite(trackId) ? styles.heartActive : ""}`}
+                onClick={() =>
+                  isFavourite(trackId)
+                    ? removeFavourite(trackId)
+                    : addFavourite({
+                        id: trackId,
+                        file: ep.file,
+                        title: ep.title,
+                        showTitle: podcast.title,
+                        image: currentSeason.image,
+                      })
+                }
+                aria-label={isFavourite(trackId) ? "Remove from favourites" : "Add to favourites"}
+              >
+                {isFavourite(trackId) ? "♥" : "♡"}
+              </button>
               <button
                 className={styles.playBtn}
                 onClick={() => {
@@ -126,7 +145,6 @@ export default function PodcastDetail({ podcast, genres, onBack }) {
         <button className={styles.backButton} onClick={onBack}>
           ← Back
         </button>
-        <span className={styles.appName}>🎙️ Podcast App</span>
       </header>
 
       <main className={styles.content}>

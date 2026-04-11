@@ -125,6 +125,7 @@ export function PodcastProvider({ children }) {
   // Everything components can read and use
   const value = {
     podcasts: paged,
+    allPodcasts,
     loading,
     error,
     search,   setSearch,

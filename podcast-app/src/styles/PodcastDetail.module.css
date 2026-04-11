@@ -245,7 +245,35 @@
   color: var(--grey-text);
   font-style: italic;
   padding: 1rem 0;
+
 }
+
+.heartBtn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  font-size: 1rem;
+  color: var(--mid);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.heartBtn:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.heartActive {
+  color: var(--red);
+  border-color: var(--red);
+}
+
 @media (max-width: 640px) {
   .heroCard {
     flex-direction: column;

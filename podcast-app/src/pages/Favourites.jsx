@@ -1,0 +1,82 @@
+import { useFavourites } from "../context/FavouritesContext";
+import { useAudioPlayer } from "../context/AudioPlayerContext";
+import styles from "../styles/Favourites.module.css";
+
+function formatDate(isoString) {
+  return new Date(isoString).toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export default function Favourites() {
+  const { favourites, removeFavourite } = useFavourites();
+  const { play, pause, isPlaying, currentTrack } = useAudioPlayer();
+
+  if (favourites.length === 0) {
+    return (
+      <main className={styles.empty}>
+        <p>❤️ No favourites yet — go explore!</p>
+      </main>
+    );
+  }
+
+  // Group by show title using 'reduce'
+  const grouped = favourites.reduce((acc, ep) => {
+    const key = ep.showTitle;
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(ep);
+    return acc;
+  }, {});
+
+  return (
+    <main className={styles.page}>
+      <h1 className={styles.heading}>Favourite Episodes</h1>
+      <p className={styles.subheading}>Your saved episodes from all shows</p>
+
+      {Object.entries(grouped).map(([showTitle, episodes]) => (
+        <section key={showTitle} className={styles.group}>
+          <h2 className={styles.showTitle}>
+            🎙️ {showTitle}
+            <span className={styles.count}>{episodes.length} episodes</span>
+          </h2>
+
+          {episodes.map((ep) => {
+            const isThisPlaying = isPlaying && currentTrack?.id === ep.id;
+            return (
+              <div key={ep.id} className={styles.episodeCard}>
+                <img src={ep.image} alt={ep.showTitle} className={styles.cover} />
+                <div className={styles.info}>
+                  <h3 className={styles.episodeTitle}>{ep.title}</h3>
+                  <p className={styles.meta}>{ep.showTitle}</p>
+                  <p className={styles.addedAt}>Added {formatDate(ep.addedAt)}</p>
+                </div>
+                <div className={styles.actions}>
+                  <button
+                    className={styles.playBtn}
+                    onClick={() =>
+                      isThisPlaying ? pause() : play(ep)
+                    }
+                    aria-label={isThisPlaying ? "Pause" : "Play"}
+                  >
+                    {isThisPlaying ? "⏸" : "▶"}
+                  </button>
+                  <button
+                    className={styles.removeBtn}
+                    onClick={() => removeFavourite(ep.id)}
+                    aria-label="Remove from favourites"
+                  >
+                    ♥
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </section>
+      ))}
+    </main>
+  );
+}

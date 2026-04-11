@@ -8,6 +8,7 @@ import PodcastGrid from "../components/Podcasts/PodcastGrid";
 import Pagination  from "../components/UI/Pagination";
 import Loading     from "../components/UI/Loading";
 import ErrorMessage from "../components/UI/Error";
+import Carousel from "../components/UI/Carousel";
 import { usePodcast } from "../context/PodcastContext";
 import { genres }     from "../data";
 
@@ -24,7 +25,7 @@ import styles from "../styles/Home.module.css";
 export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { loading, error, currentFilters, restoreFilters } = usePodcast();
+  const { loading, error, currentFilters, restoreFilters, allPodcasts } = usePodcast();
 
   // Restore saved filters when returning from ShowDetail
   useEffect(() => {
@@ -45,15 +46,17 @@ export default function Home() {
   if (loading) return <Loading message="Loading podcasts…" />;
   if (error)   return <ErrorMessage message={`Failed to load podcasts: ${error}`} />;
 
+  // Pick 10 random shows for the carousel
+  const recommended = [...allPodcasts].sort(() => Math.random() - 0.5).slice(0, 10);
+
   return (
-    <main>
+   <main>
       <div className={styles.controls}>
         <SearchBar />
-        <div className={styles.filterRow}>
-          <GenreFilter genres={genres} />
-          <SortSelect />
-        </div>
+        <GenreFilter genres={genres} />
+        <SortSelect />
       </div>
+      <Carousel shows={recommended} />
       <PodcastGrid genres={genres} onShowClick={handleShowClick} />
       <Pagination />
     </main>
