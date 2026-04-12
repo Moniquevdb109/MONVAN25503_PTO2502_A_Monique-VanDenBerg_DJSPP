@@ -2,8 +2,6 @@
 
 A fully-featured podcast browsing and listening application built with React. Browse shows, favourite episodes, and enjoy seamless audio playback across all pages.
 
-🔗 **Live Demo:** - TBD
-
 ---
 
 ## 📋 Table of Contents
