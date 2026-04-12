@@ -1,5 +1,7 @@
 import { useAudioPlayer } from "../../context/AudioPlayerContext";
+import { useListening } from "../../context/ListeningContext";
 import styles from "../../styles/GlobalPlayer.module.css";
+import { useEffect } from "react";
 
 function formatTime(seconds) {
   if (!seconds || isNaN(seconds)) return "0:00";
@@ -14,6 +16,23 @@ export default function GlobalPlayer() {
     volume, play, pause, seek, changeVolume,
     playNext, playPrev, queue, queueIndex,
   } = useAudioPlayer();
+
+   const { saveProgress } = useListening();
+
+  // Save progress every 5 seconds
+  useEffect(() => {
+    if (!currentTrack || !isPlaying) return;
+    const interval = setInterval(() => {
+      saveProgress(currentTrack.id, progress, duration);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [currentTrack, isPlaying, progress, duration]);
+
+  // Save on pause
+  useEffect(() => {
+    if (!currentTrack || isPlaying) return;
+    saveProgress(currentTrack.id, progress, duration);
+  }, [isPlaying]);
 
   if (!currentTrack) return null;
 

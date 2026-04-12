@@ -8,11 +8,13 @@ import { FavouritesProvider } from "./context/FavouritesContext";
 import { AudioPlayerProvider } from "./context/AudioPlayerContext";
 import GlobalPlayer from "./components/UI/GlobalPlayer";
 import Favourites from "./pages/Favourites";
+import { ListeningProvider } from "./context/ListeningContext";
 
 export default function App() {
   return (
     <ThemeProvider>
       <FavouritesProvider>
+        <ListeningProvider>
         <AudioPlayerProvider>
           <Header />
           <PodcastProvider>
@@ -24,6 +26,7 @@ export default function App() {
           </PodcastProvider>
           <GlobalPlayer />
         </AudioPlayerProvider>
+        </ListeningProvider>
       </FavouritesProvider>
     </ThemeProvider>
   );

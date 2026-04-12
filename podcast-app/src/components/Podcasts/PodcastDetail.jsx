@@ -4,12 +4,14 @@ import GenreTags from "../UI/GenreTags";
 import styles from "../../styles/PodcastDetail.module.css";
 import { useAudioPlayer } from "../../context/AudioPlayerContext";
 import { useFavourites } from "../../context/FavouritesContext";
+import { useListening } from "../../context/ListeningContext";
 
 function SeasonNav({ seasons, podcast }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [dropdownOpen, setDropdownOpen]   = useState(false);
   const { play, pause, isPlaying, currentTrack } = useAudioPlayer();
   const { addFavourite, removeFavourite, isFavourite } = useFavourites();
+  const { getProgress } = useListening();
 
   if (!seasons || seasons.length === 0) {
     return <p className={styles.empty}>No seasons available.</p>;
@@ -75,6 +77,21 @@ function SeasonNav({ seasons, podcast }) {
                 <p className={styles.episodeNumber}>Episode {ep.episode}</p>
                 <h4 className={styles.episodeTitle}>{ep.title}</h4>
                 <p className={styles.episodeDescription}>{truncate(ep.description)}</p>
+                {(() => {
+                  const prog = getProgress(trackId);
+                  if (!prog) return null;
+                  if (prog.finished) {
+                    return <span className={styles.finishedBadge}>✓ Finished</span>;
+                  }
+                  const pct = prog.duration > 0
+                    ? Math.round((prog.currentTime / prog.duration) * 100)
+                    : 0;
+                  return (
+                    <div className={styles.progressBar}>
+                      <div className={styles.progressFill} style={{ width: `${pct}%` }} />
+                    </div>
+                  );
+                })()}
               </div>
               <button
                 className={`${styles.heartBtn} ${isFavourite(trackId) ? styles.heartActive : ""}`}
@@ -105,13 +122,20 @@ function SeasonNav({ seasons, podcast }) {
                     showTitle: podcast.title,
                     image: currentSeason.image,
                   }));
-                  isThisPlaying ? pause() : play({
-                    id: trackId,
-                    file: ep.file,
-                    title: ep.title,
-                    showTitle: podcast.title,
-                    image: currentSeason.image,
-                  }, playlist);
+                  
+                  if (isThisPlaying) {
+                    pause();
+                  } else {
+                    const prog = getProgress(trackId);
+                    play({
+                      id: trackId,
+                      file: ep.file,
+                      title: ep.title,
+                      showTitle: podcast.title,
+                      image: currentSeason.image,
+                      startTime: prog && !prog.finished ? prog.currentTime : 0,
+                    }, playlist);
+                  }
                 }}
                 aria-label={isThisPlaying ? "Pause" : "Play"}
               >

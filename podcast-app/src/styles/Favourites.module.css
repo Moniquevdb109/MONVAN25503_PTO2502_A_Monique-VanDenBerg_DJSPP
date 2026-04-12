@@ -163,3 +163,20 @@
   background: var(--red);
   color: white;
 }
+
+.resetBtn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  color: var(--mid);
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: auto;
+}
+
+.resetBtn:hover {
+  border-color: var(--red);
+  color: var(--red);
+}

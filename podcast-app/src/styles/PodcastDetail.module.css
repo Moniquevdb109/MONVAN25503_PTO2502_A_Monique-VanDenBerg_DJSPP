@@ -274,6 +274,29 @@
   border-color: var(--red);
 }
 
+.progressBar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 999px;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--red);
+  border-radius: 999px;
+  transition: width 0.3s;
+}
+
+.finishedBadge {
+  font-size: 0.75rem;
+  color: var(--red);
+  font-weight: 600;
+  margin-top: 0.35rem;
+  display: block;
+}
+
 @media (max-width: 640px) {
   .heroCard {
     flex-direction: column;

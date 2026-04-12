@@ -2,6 +2,7 @@ import { useFavourites } from "../context/FavouritesContext";
 import { useState } from "react";
 import { useAudioPlayer } from "../context/AudioPlayerContext";
 import styles from "../styles/Favourites.module.css";
+import { useListening } from "../context/ListeningContext";
 
 function formatDate(isoString) {
   return new Date(isoString).toLocaleDateString(undefined, {
@@ -21,6 +22,7 @@ export default function Favourites() {
   const { favourites, removeFavourite } = useFavourites();
   const { play, pause, isPlaying, currentTrack } = useAudioPlayer();
   const [sortKey, setSortKey] = useState("newest");
+  const { resetHistory } = useListening();
 
   if (favourites.length === 0) {
     return (
@@ -57,16 +59,24 @@ export default function Favourites() {
       <div className={styles.sortRow}>
         <label className={styles.sortLabel}>Sort by:</label>
         <select
-          className={styles.sortSelect}
-          value={sortKey}
-          onChange={(e) => setSortKey(e.target.value)}
+            className={styles.sortSelect}
+            value={sortKey}
+            onChange={(e) => setSortKey(e.target.value)}
         >
-          <option value="newest">Newest Added</option>
-          <option value="oldest">Oldest Added</option>
-          <option value="a-z">Title A → Z</option>
-          <option value="z-a">Title Z → A</option>
+            <option value="newest">Newest Added</option>
+            <option value="oldest">Oldest Added</option>
+            <option value="a-z">Title A → Z</option>
+            <option value="z-a">Title Z → A</option>
         </select>
-      </div>
+        <button
+            className={styles.resetBtn}
+            onClick={() => {
+            if (window.confirm("Reset all listening history?")) resetHistory();
+            }}
+        >
+            Reset History
+        </button>
+        </div>
 
       {Object.entries(grouped).map(([showTitle, episodes]) => (
         <section key={showTitle} className={styles.group}>

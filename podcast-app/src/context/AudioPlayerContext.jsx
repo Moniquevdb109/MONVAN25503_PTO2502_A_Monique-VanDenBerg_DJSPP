@@ -55,10 +55,15 @@ export function AudioPlayerProvider({ children }) {
     }
     audio.src = track.file;
     audio.load();
-    audio.play();
+    audio.addEventListener("loadedmetadata", () => {
+      if (track.startTime) {
+        audio.currentTime = track.startTime;
+      }
+      audio.play();
+    }, { once: true });
     setCurrentTrack(track);
     setIsPlaying(true);
-    setProgress(0);
+    setProgress(track.startTime || 0);
     setDuration(0);
 
     if (playlist.length) {
