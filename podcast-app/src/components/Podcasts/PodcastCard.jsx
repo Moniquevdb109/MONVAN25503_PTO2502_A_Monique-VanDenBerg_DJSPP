@@ -1,6 +1,10 @@
 import { formatDate } from "../../utils/formatDate";
 import styles from "../../styles/PodcastCard.module.css";
 
+function decodeTitle(title) {
+  return title?.replace(/&amp;/g, "&") ?? title;
+}
+
 /**
  * Renders a single podcast preview card with image, title, number of seasons,
  * genres (as styled tags), and the last updated date.
@@ -30,7 +34,7 @@ export default function PodcastCard({ podcast, genres, onClick }) {
     <div className={styles.card} onClick={onClick}>
       <img src={podcast.image} alt={podcast.title} />
 
-      <h3>{podcast.title.replace(/&amp;/g, "&")}</h3>
+      <h3>{decodeTitle(podcast.title)}</h3>
       <p>{podcast.seasons} {podcast.seasons === 1 ? "season" : "seasons"}</p>
       <div className={styles.tags}>{genreSpans}</div>
       <p className={styles.updatedText}>

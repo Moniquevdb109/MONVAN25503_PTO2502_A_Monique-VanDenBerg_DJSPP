@@ -13,6 +13,10 @@ function formatDate(isoString) {
   });
 }
 
+function decodeTitle(title) {
+  return title?.replace(/&amp;/g, "&") ?? title;
+}
+
 export default function Favourites() {
   const { favourites, removeFavourite } = useFavourites();
   const { play, pause, isPlaying, currentTrack } = useAudioPlayer();
@@ -39,7 +43,7 @@ export default function Favourites() {
 
   // Group by show title using 'reduce'
   const grouped = sorted.reduce((acc, ep) => {
-    const key = ep.showTitle;
+    const key = decodeTitle(ep.showTitle);
     if (!acc[key]) acc[key] = [];
     acc[key].push(ep);
     return acc;
@@ -67,7 +71,7 @@ export default function Favourites() {
       {Object.entries(grouped).map(([showTitle, episodes]) => (
         <section key={showTitle} className={styles.group}>
           <h2 className={styles.showTitle}>
-            🎙️ {showTitle}
+            🎙️ {decodeTitle(showTitle)}
             <span className={styles.count}>{episodes.length} episodes</span>
           </h2>
 
@@ -75,10 +79,12 @@ export default function Favourites() {
             const isThisPlaying = isPlaying && currentTrack?.id === ep.id;
             return (
               <div key={ep.id} className={styles.episodeCard}>
-                <img src={ep.image} alt={ep.showTitle} className={styles.cover} />
+                <img src={ep.image} alt={decodeTitle(ep.showTitle)} className={styles.cover} />   
                 <div className={styles.info}>
                   <h3 className={styles.episodeTitle}>{ep.title}</h3>
-                  <p className={styles.meta}>{ep.showTitle}</p>
+                  <p className={styles.meta}>
+                    {decodeTitle(ep.showTitle)} • Season {ep.season} • Episode {ep.episode}
+                    </p>
                   <p className={styles.addedAt}>Added {formatDate(ep.addedAt)}</p>
                 </div>
                 <div className={styles.actions}>
