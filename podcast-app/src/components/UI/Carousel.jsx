@@ -3,9 +3,25 @@ import { useNavigate } from "react-router-dom";
 import { genres } from "../../data";
 import styles from "../../styles/Carousel.module.css";
 
+/**
+ * Carousel — horizontally scrollable recommended shows carousel.
+ * Displays a looping list of show cards with image, title, and genre tags.
+ * Supports arrow navigation and loops back to the start when the end is reached.
+ *
+ * @param {Object} props
+ * @param {Array}  props.shows - Array of podcast preview objects to display.
+ * @returns {JSX.Element}
+ */
+
 export default function Carousel({ shows }) {
   const scrollRef = useRef(null);
   const navigate  = useNavigate();
+
+   /**
+   * Scrolls the carousel left or right by a fixed amount.
+   * Loops back to the start when the end is reached and vice versa.
+   * @param {"left" | "right"} direction - The direction to scroll.
+   */
 
   function scroll(direction) {
     const container = scrollRef.current;
@@ -28,12 +44,22 @@ export default function Carousel({ shows }) {
     }
   }
 
+  /**
+   * Resolves genre IDs to human-readable genre title strings.
+   * @param {number[]} ids - Array of genre ID numbers.
+   * @returns {string[]} Array of matching genre title strings.
+   */
   function resolveGenres(ids = []) {
     return ids.map((id) => {
       const match = genres.find((g) => g.id === id);
       return match ? match.title : null;
     }).filter(Boolean);
   }
+  
+  /**
+   * Triple the shows array to create a looping effect.
+   * Using index in the key ensures uniqueness across duplicates.
+   */
 
   const loopedShows = [...shows, ...shows, ...shows];
 

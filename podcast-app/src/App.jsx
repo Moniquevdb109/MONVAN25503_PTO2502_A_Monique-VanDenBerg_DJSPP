@@ -10,6 +10,21 @@ import GlobalPlayer from "./components/UI/GlobalPlayer";
 import Favourites from "./pages/Favourites";
 import { ListeningProvider } from "./context/ListeningContext";
 
+/**
+ * App — root component of the application.
+ * Sets up all global context providers and defines the route structure.
+ *
+ * Provider order (outermost to innermost):
+ * - ThemeProvider: light/dark mode across the entire app
+ * - FavouritesProvider: favourited episodes accessible everywhere
+ * - ListeningProvider: listening progress accessible everywhere
+ * - AudioPlayerProvider: global audio playback state
+ * - PodcastProvider: podcast data, filtering, sorting, pagination
+ *
+ * GlobalPlayer is placed outside Routes so it persists across navigation.
+ *
+ * @returns {JSX.Element}
+ */
 export default function App() {
   return (
     <ThemeProvider>

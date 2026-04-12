@@ -6,6 +6,14 @@ import { useAudioPlayer } from "../../context/AudioPlayerContext";
 import { useFavourites } from "../../context/FavouritesContext";
 import { useListening } from "../../context/ListeningContext";
 
+/**
+ * SeasonNav — season selector dropdown and episode list.
+ * Handles season switching, episode playback, favouriting, and listening progress.
+ * Built inside PodcastDetail since it's only used here.
+ *
+ * @param {{ seasons: Array, podcast: Object }} props
+ * @returns {JSX.Element}
+ */
 function SeasonNav({ seasons, podcast }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [dropdownOpen, setDropdownOpen]   = useState(false);
@@ -18,6 +26,13 @@ function SeasonNav({ seasons, podcast }) {
   }
 
   const currentSeason = seasons[selectedIndex];
+
+   /**
+   * Truncates episode description to a given character limit.
+   * @param {string} text - The text to truncate.
+   * @param {number} [limit=160] - Maximum number of characters.
+   * @returns {string} Truncated text with ellipsis if needed.
+   */
 
   function truncate(text, limit = 160) {
     if (!text) return "No description available.";
@@ -150,7 +165,22 @@ function SeasonNav({ seasons, podcast }) {
   );
 }
 
+/**
+ * PodcastDetail — full show detail view.
+ * Displays hero card with show metadata and SeasonNav below.
+ *
+ * @param {Object}   props
+ * @param {Object}   props.podcast - Full show object with seasons and episodes.
+ * @param {Array}    props.genres  - Genre definitions for ID → label resolution.
+ * @param {Function} props.onBack  - Navigates back to the home page.
+ * @returns {JSX.Element}
+ */
 export default function PodcastDetail({ podcast, genres, onBack }) {
+   /**
+   * Resolves genre ID numbers to human-readable title strings.
+   * @param {number[]} ids - Array of genre IDs.
+   * @returns {string[]} Array of genre title strings.
+   */
   function resolveGenres(ids = []) {
     return ids.map((id) => {
       const match = genres.find((g) => g.id === id);

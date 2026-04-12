@@ -3,6 +3,13 @@ import ThemeToggle from "./ThemeToggle";
 import { NavLink } from "react-router-dom";
 import { useFavourites } from "../../context/FavouritesContext";
 
+/**
+ * Header — sticky top navigation bar rendered across all pages.
+ * Displays the app brand/logo, navigation links, and theme toggle.
+ * Shows a badge on the Favourites link indicating the number of saved episodes.
+ *
+ * @returns {JSX.Element}
+ */
 export default function Header() {
   const { favourites } = useFavourites();
 

@@ -23,11 +23,21 @@ export default function ShowDetail() {
   const navigate = useNavigate();
   const location = useLocation();
 
+    /** Full podcast object including seasons and episodes */
   const [podcast, setPodcast] = useState(null);
+
+
+  /** Whether the podcast data is currently being fetched */
   const [loading, setLoading] = useState(true);
+
+    /** Error message string if the fetch fails */
   const [error,   setError]   = useState(null);
 
-  // Fetch the show whenever the id in the URL changes
+    /**
+   * Fetches the full show data whenever the show ID in the URL changes.
+   * Resets state before each fetch to avoid stale data being displayed.
+   */
+
   useEffect(() => {
     setLoading(true);
     setError(null);
@@ -35,8 +45,10 @@ export default function ShowDetail() {
     fetchSinglePodcast(id, setPodcast, setError, setLoading);
   }, [id]);
 
-  /**
-   * Navigates back to home, restoring filter state via router location state.
+    /**
+   * Navigates back to the home page.
+   * Restores the user's previous filter state via router location state
+   * so they return to the same search/filter/page they were on.
    */
   function handleBack() {
     navigate("/", { state: { filters: location.state?.filters ?? {} } });

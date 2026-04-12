@@ -3,6 +3,11 @@ import { useListening } from "../../context/ListeningContext";
 import styles from "../../styles/GlobalPlayer.module.css";
 import { useEffect } from "react";
 
+/**
+ * Formats a time value in seconds to a human-readable mm:ss string.
+ * @param {number} seconds - Time in seconds to format.
+ * @returns {string} Formatted time string e.g. "2:45".
+ */
 function formatTime(seconds) {
   if (!seconds || isNaN(seconds)) return "0:00";
   const m = Math.floor(seconds / 60);
@@ -10,6 +15,14 @@ function formatTime(seconds) {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+/**
+ * GlobalPlayer — fixed audio player bar rendered at the bottom of every page.
+ * Provides play/pause, skip, seek, and volume controls.
+ * Saves listening progress to context every 5 seconds and on pause.
+ * Returns null if no track is currently loaded.
+ *
+ * @returns {JSX.Element | null}
+ */
 export default function GlobalPlayer() {
   const {
     currentTrack, isPlaying, progress, duration,
@@ -19,7 +32,10 @@ export default function GlobalPlayer() {
 
    const { saveProgress } = useListening();
 
-  // Save progress every 5 seconds
+  /**
+   * Saves playback progress every 5 seconds while audio is playing.
+   * Clears the interval when playback stops or the track changes.
+   */
   useEffect(() => {
     if (!currentTrack || !isPlaying) return;
     const interval = setInterval(() => {
@@ -28,7 +44,10 @@ export default function GlobalPlayer() {
     return () => clearInterval(interval);
   }, [currentTrack, isPlaying, progress, duration]);
 
-  // Save on pause
+  /**
+   * Saves playback progress whenever the audio is paused.
+   * Ensures position is stored even if the 5-second interval hasn't fired.
+   */
   useEffect(() => {
     if (!currentTrack || isPlaying) return;
     saveProgress(currentTrack.id, progress, duration);

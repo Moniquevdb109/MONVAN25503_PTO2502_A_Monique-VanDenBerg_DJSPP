@@ -4,6 +4,14 @@ import { useAudioPlayer } from "../context/AudioPlayerContext";
 import styles from "../styles/Favourites.module.css";
 import { useListening } from "../context/ListeningContext";
 
+
+/**
+ * Formats an ISO date string into a human-readable date and time string.
+ * Example output: "April 12, 2026 at 09:28 AM"
+ *
+ * @param {string} isoString - A valid ISO 8601 date string.
+ * @returns {string} Formatted date and time string.
+ */
 function formatDate(isoString) {
   return new Date(isoString).toLocaleDateString(undefined, {
     year: "numeric",
@@ -14,16 +22,33 @@ function formatDate(isoString) {
   });
 }
 
+/**
+ * Decodes HTML entities in a title string.
+ * Specifically handles &amp; which the API returns for ampersands.
+ *
+ * @param {string} title - The title string to decode.
+ * @returns {string} Decoded title string.
+ */
+
 function decodeTitle(title) {
   return title?.replace(/&amp;/g, "&") ?? title;
 }
 
+/**
+ * Favourites page — displays all favourited episodes grouped by show.
+ * Supports sorting by title (A–Z / Z–A) and date added (newest/oldest).
+ * Allows playback of favourited episodes and removal from the list.
+ * Includes a reset button to clear all listening history.
+ *
+ * @returns {JSX.Element}
+ */
 export default function Favourites() {
   const { favourites, removeFavourite } = useFavourites();
   const { play, pause, isPlaying, currentTrack } = useAudioPlayer();
   const [sortKey, setSortKey] = useState("newest");
   const { resetHistory } = useListening();
 
+    // Show empty state if no episodes have been favourited
   if (favourites.length === 0) {
     return (
       <main className={styles.empty}>
@@ -32,7 +57,11 @@ export default function Favourites() {
     );
   }
 
-  // Soft all favourites by selected sort key
+    /**
+   * Sort favourites based on the selected sort key.
+   * Sorting is applied before grouping so order is consistent within groups.
+   */
+
     const sorted = [...favourites].sort((a, b) => {
         switch (sortKey) {
             case "newest": return new Date(b.addedAt) - new Date(a.addedAt);
@@ -43,7 +72,10 @@ export default function Favourites() {
         }
     });
 
-  // Group by show title using 'reduce'
+   /**
+   * Group sorted episodes by show title using reduce.
+   * Each key is a decoded show title, value is an array of episodes.
+   */
   const grouped = sorted.reduce((acc, ep) => {
     const key = decodeTitle(ep.showTitle);
     if (!acc[key]) acc[key] = [];
@@ -68,6 +100,7 @@ export default function Favourites() {
             <option value="a-z">Title A → Z</option>
             <option value="z-a">Title Z → A</option>
         </select>
+         {/* Prompts confirmation before clearing all listening history */}
         <button
             className={styles.resetBtn}
             onClick={() => {
@@ -78,6 +111,7 @@ export default function Favourites() {
         </button>
         </div>
 
+  {/* Render each show group with its episodes */}
       {Object.entries(grouped).map(([showTitle, episodes]) => (
         <section key={showTitle} className={styles.group}>
           <h2 className={styles.showTitle}>
