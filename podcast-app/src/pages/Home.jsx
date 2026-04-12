@@ -47,7 +47,9 @@ export default function Home() {
   if (error)   return <ErrorMessage message={`Failed to load podcasts: ${error}`} />;
 
   // Pick 10 random shows for the carousel
-  const recommended = [...allPodcasts].sort(() => Math.random() - 0.5).slice(0, 10);
+  const recommended = allPodcasts?.length
+  ? [...allPodcasts].sort(() => Math.random() - 0.5).slice(0, 10)
+  : [];
 
   return (
    <main>

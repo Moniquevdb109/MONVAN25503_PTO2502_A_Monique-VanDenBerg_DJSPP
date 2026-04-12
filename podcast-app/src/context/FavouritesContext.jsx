@@ -18,7 +18,10 @@ export function FavouritesProvider({ children }) {
   function addFavourite(episode) {
     setFavourites((prev) => [
       ...prev,
-      { ...episode, addedAt: new Date().toISOString() },
+      { ...episode, 
+        season: episode.season,
+        episode: episode.episode,
+        addedAt: new Date().toISOString() },
     ]);
   }
 

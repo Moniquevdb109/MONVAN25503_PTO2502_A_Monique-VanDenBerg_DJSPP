@@ -1,4 +1,5 @@
 import { useFavourites } from "../context/FavouritesContext";
+import { useState } from "react";
 import { useAudioPlayer } from "../context/AudioPlayerContext";
 import styles from "../styles/Favourites.module.css";
 
@@ -15,6 +16,7 @@ function formatDate(isoString) {
 export default function Favourites() {
   const { favourites, removeFavourite } = useFavourites();
   const { play, pause, isPlaying, currentTrack } = useAudioPlayer();
+  const [sortKey, setSortKey] = useState("newest");
 
   if (favourites.length === 0) {
     return (
@@ -24,8 +26,19 @@ export default function Favourites() {
     );
   }
 
+  // Soft all favourites by selected sort key
+    const sorted = [...favourites].sort((a, b) => {
+        switch (sortKey) {
+            case "newest": return new Date(b.addedAt) - new Date(a.addedAt);
+            case "oldest": return new Date(a.addedAt) - new Date(b.addedAt);
+            case "a-z":     return a.title.localeCompare(b.title);
+            case "z-a":     return b.title.localeCompare(a.title);
+            default:        return 0;
+        }
+    });
+
   // Group by show title using 'reduce'
-  const grouped = favourites.reduce((acc, ep) => {
+  const grouped = sorted.reduce((acc, ep) => {
     const key = ep.showTitle;
     if (!acc[key]) acc[key] = [];
     acc[key].push(ep);
@@ -36,6 +49,20 @@ export default function Favourites() {
     <main className={styles.page}>
       <h1 className={styles.heading}>Favourite Episodes</h1>
       <p className={styles.subheading}>Your saved episodes from all shows</p>
+
+      <div className={styles.sortRow}>
+        <label className={styles.sortLabel}>Sort by:</label>
+        <select
+          className={styles.sortSelect}
+          value={sortKey}
+          onChange={(e) => setSortKey(e.target.value)}
+        >
+          <option value="newest">Newest Added</option>
+          <option value="oldest">Oldest Added</option>
+          <option value="a-z">Title A → Z</option>
+          <option value="z-a">Title Z → A</option>
+        </select>
+      </div>
 
       {Object.entries(grouped).map(([showTitle, episodes]) => (
         <section key={showTitle} className={styles.group}>

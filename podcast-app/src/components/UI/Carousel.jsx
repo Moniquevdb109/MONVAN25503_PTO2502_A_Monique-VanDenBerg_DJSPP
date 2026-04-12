@@ -60,9 +60,9 @@ export default function Carousel({ shows }) {
       </div>
 
       <div className={styles.track} ref={scrollRef}>
-        {loopedShows.map((show) => (
+        {loopedShows.map((show, index) => (
           <div
-            key={show.id}
+            key={`${show.id}-${index}`}
             className={styles.card}
             onClick={() => navigate(`/show/${show.id}`)}
           >

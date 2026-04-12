@@ -87,6 +87,8 @@ function SeasonNav({ seasons, podcast }) {
                         title: ep.title,
                         showTitle: podcast.title,
                         image: currentSeason.image,
+                        season: currentSeason.season,
+                        episode: ep.episode,
                       })
                 }
                 aria-label={isFavourite(trackId) ? "Remove from favourites" : "Add to favourites"}

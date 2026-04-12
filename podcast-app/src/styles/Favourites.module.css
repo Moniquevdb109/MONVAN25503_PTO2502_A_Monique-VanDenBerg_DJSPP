@@ -30,6 +30,27 @@
   margin-bottom: 2.5rem;
 }
 
+.sortRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.sortLabel {
+  font-size: 0.9rem;
+  color: var(--mid);
+}
+
+.sortSelect {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  background: var(--white);
+  color: var(--dark);
+}
+
 .showTitle {
   font-size: 1.1rem;
   font-weight: 700;
