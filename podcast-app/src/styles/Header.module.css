@@ -85,7 +85,7 @@
     gap: 0.5rem;
   }
 
-  .appTitle {
+  .brand h1 {
     font-size: 0.85rem;
     margin: 0;
     white-space: nowrap;
