@@ -285,6 +285,20 @@
   .showTitle { font-size: 1.35rem; }
 }
 @media (max-width: 480px) {
-  .episodeCard { flex-direction: column; }
-  .episodeThumb { width: 40px; height: 40px; }
+  .episodeCard {
+    flex-wrap: wrap;
+    position: relative;
+    padding-top: 1.5rem;
+  }
+
+  .playBtn,
+  .heartBtn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.5rem;
+  }
+
+  .heartBtn {
+    right: 3rem;
+  }
 }
