@@ -121,5 +121,6 @@ npm run dev
 ## 👩‍💻 Author
 
 **Monique Van Den Berg**
+
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](http://linkedin.com/in/monique-van-den-berg)  
 [![GitHub](https://img.shields.io/badge/GitHub-Profile-black?logo=github)](https://github.com/Moniquevdb109)
